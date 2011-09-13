@@ -2,7 +2,7 @@ require "paperclip-fedora/version"
 
 module Paperclip
   module Storage
-    module FedoraCommons
+    module Fedora
       def self.extended(base)
         require 'rubydora'
         base.instance_eval do
