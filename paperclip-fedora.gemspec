@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Paperclip::Fedora::VERSION
   s.authors     = ["Jared Sartin"]
   s.email       = ["jaredsartin@gmail.com"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.homepage    = "https://github.com/JaredSartin/paperclip-fedora"
+  s.summary     = %q{Fedora Commons storage support for paperclip file attachment}
+  s.description = %q{Adds Fedora Commons storage support for the Paperclip gem.}
 
   s.rubyforge_project = "paperclip-fedora"
 
@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
+  s.add_runtime_dependency "paperclip"
+  s.add_runtime_dependency "rubdora"
 end
