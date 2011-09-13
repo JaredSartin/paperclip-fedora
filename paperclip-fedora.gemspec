@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency "paperclip"
-  s.add_runtime_dependency "rubdora"
+  s.add_runtime_dependency "rubydora"
 end

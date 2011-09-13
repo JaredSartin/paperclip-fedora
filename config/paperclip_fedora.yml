@@ -1,0 +1,14 @@
+test:
+  user: 'fedoraAdmin'
+  password: 'fedoraAdmin'
+  host: 'http://localhost:8983/fedora'
+
+development:
+  user: 'fedoraAdmin'
+  password: 'fedoraAdmin'
+  host: 'http://localhost:8983/fedora'
+
+production:
+  user: 'fedoraAdmin'
+  password: 'fedoraAdmin'
+  host: 'http://localhost:8983/fedora'
