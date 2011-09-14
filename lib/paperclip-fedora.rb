@@ -1,4 +1,5 @@
 require "paperclip-fedora/version"
+require "FileUtils" unless defined?(FileUtils)
 
 module Paperclip
   module Storage
@@ -7,7 +8,7 @@ module Paperclip
         require 'rubydora'
         base.instance_eval do
           if(!@options[:fedora_config])
-            @options[:fedora_config] = Rails.root.to_s + "/config/paperclip_fedora.yml"
+            @options[:fedora_config] = config_file
           end
 
           @fedora_config = parse_config(@options[:fedora_config])
@@ -38,7 +39,7 @@ module Paperclip
           ds.file = file
           ds.dsLabel = "TempFile"
           ds.save
-          log("Added #{style} to #{@object_id}")
+          log("Added #{style} datastream to #{@object_id}")
         end
         @queued_for_write = {}
       end
@@ -73,6 +74,18 @@ module Paperclip
       def parse_config config
         config = find_credentials(config).stringify_keys
         (config[Rails.env] || config).symbolize_keys
+      end
+
+      def setup!
+        FileUtils.cp(File.dirname(__FILE__) + "/../config/paperclip_fedora.yml", config_file) unless config?
+      end
+
+      def config_file
+        Rails.root.join("config", "paperclip_fedora.yml").to_s
+      end
+      
+      def config?
+        File.file? config_file
       end
 
       private

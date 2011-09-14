@@ -14,7 +14,7 @@ has_attachment:
 
 `has_attached_file :content, :storage => :Fedora`
 
-For server connection options, you should have a file calle paperclip_fedora.yml in your
+For server connection options, you should have a file titled paperclip_fedora.yml in your
 /config folder. The default file contents are below:
 
     test:
