@@ -17,8 +17,7 @@ has_attachment:
 For server connection options, you should have a file calle paperclip_fedora.yml in your
 /config folder. The default file contents are below:
 
-`
-test:
+`test:
   user: 'fedoraAdmin'
   password: 'fedoraAdmin'
   host: 'http://localhost:8983/fedora'
@@ -31,9 +30,7 @@ development:
 production:
   user: 'fedoraAdmin'
   password: 'fedoraAdmin'
-  host: 'http://localhost:8983/fedora'
-
-`
+  host: 'http://localhost:8983/fedora'`
 
 ## Overview
 
