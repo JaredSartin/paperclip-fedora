@@ -2,10 +2,6 @@
 $:.push File.expand_path("../lib", __FILE__)
 require "paperclip-fedora/version"
 
-include_files = ["README*", "Rakefile", "{lib,tasks}/**/*"].map do |glob|
-  Dir[glob]
-end.flatten
-
 Gem::Specification.new do |s|
   s.name        = "paperclip-fedora"
   s.version     = Paperclip::Fedora::VERSION

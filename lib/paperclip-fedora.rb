@@ -1,9 +1,11 @@
 require "paperclip-fedora/version"
+require "paperclip-fedora/railtie" if Rails.version >= "3.0"
 require "FileUtils" unless defined?(FileUtils)
 
 module Paperclip
   module Storage
     module Fedora
+      extend self
       def self.extended(base)
         require 'rubydora'
         base.instance_eval do

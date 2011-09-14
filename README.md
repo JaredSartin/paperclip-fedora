@@ -15,20 +15,11 @@ has_attachment:
 `has_attached_file :content, :storage => :Fedora`
 
 For server connection options, you should have a file titled paperclip_fedora.yml in your
-/config folder. The default file contents are below:
+/config folder. There is a nifty rake task to put the yaml file there for you:
 
-    test:
-      user: 'fedoraAdmin'
-      password: 'fedoraAdmin'
-      host: 'http://localhost:8983/fedora'
-    development:
-      user: 'fedoraAdmin'
-      password: 'fedoraAdmin'
-      host: 'http://localhost:8983/fedora'
-    production:
-      user: 'fedoraAdmin'
-      password: 'fedoraAdmin'
-      host: 'http://localhost:8983/fedora'
+`rake paperclip:fedora:setup`
+
+After that, go edit the yaml file with your server settings per rails environment (They default to a server on the localhost).
 
 ## Overview
 
