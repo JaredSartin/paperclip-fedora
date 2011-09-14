@@ -11,23 +11,20 @@ module Paperclip
           end
 
           @fedora_config = parse_config(@options[:fedora_config])
-          @url = @fedora_config[:host] + '/objects/:id/datastreams/:style/content'
-          @path = ':id'
+          @url = @fedora_config[:host] + "/objects/upload\::id/datastreams/:style/content"
+          @path = "upload\::id"
         end
       end
 
       def exists?(style=default_style)
-        if exists?(style)
-          !fedora_object.datastreams[style].new?
-        else
-          false
-        end
+        exists_bool = !fedora_object.datastreams[style.to_s].new?
+        exists_bool
       end
 
       def to_file(style=default_style)
-        return @queued_for_write[style] if @queued_for_write[style]
-        ds = fedora_object.datastreams[style]
-        file = Tempfile.new([ds.label, style])
+        return @queued_for_write[style.to_s] if @queued_for_write[style.to_s]
+        ds = fedora_object.datastreams[style.to_s]
+        file = Tempfile.new([ds.label, style.to_s])
         file.binmode
         file.write(ds.file)
         file.rewind
@@ -36,19 +33,22 @@ module Paperclip
 
       def flush_writes
         @queued_for_write.each do |style, file|
-          ds = fedora_object.datastreams[style]
+          ds = fedora_object.datastreams[style.to_s]
           ds.controlGroup = 'M'
           ds.file = file
-          ds.dsLabel = file.basename
+          ds.dsLabel = "TempFile"
           ds.save
+          log("Added #{style} to #{@object_id}")
         end
         @queued_for_write = {}
       end
 
       def flush_deletes
+        @queued_for_delete.uniq!
         @queued_for_delete.each do |path|
           object = fedora.find(path)
-          object.delete
+          object.delete if !object.new?
+          log("Deleted #{path}")
         end
         @queued_for_delete = []
       end
@@ -59,8 +59,9 @@ module Paperclip
       end
       
       def create_object
-        object = fedora.find(@path)
-        object.label = @path
+        @object_id = path()
+        object = fedora.find(@object_id)
+        object.label = @object_id
         saved_object = object.save
         saved_object
       end
