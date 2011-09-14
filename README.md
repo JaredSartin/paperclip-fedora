@@ -31,7 +31,3 @@ make the object label the original filename and the datastreams follow a similar
 Using Paperclip: https://github.com/thoughtbot/paperclip
 
 Using Rubydora: https://github.com/cbeer/rubydora
-
-Copyright (c) 2011 Jared Sartin. See LICENSE for
-further details.
-
