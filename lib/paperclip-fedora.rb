@@ -85,11 +85,11 @@ module Paperclip
       end
 
       def setup!
-        FileUtils.cp(File.dirname(__FILE__) + "/../config/paperclip_fedora.yml", config_file) unless config?
+        FileUtils.cp(File.dirname(__FILE__) + "/../config/paperclip-fedora.yml", config_file) unless config?
       end
 
       def config_file
-        Rails.root.join("config", "paperclip_fedora.yml").to_s
+        Rails.root.join("config", "paperclip-fedora.yml").to_s
       end
       
       def config?

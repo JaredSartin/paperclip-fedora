@@ -14,7 +14,7 @@ has_attachment:
 
 `has_attached_file :content, :storage => :Fedora`
 
-For server connection options, you should have a file titled paperclip_fedora.yml in your
+For server connection options, you should have a file titled paperclip-fedora.yml in your
 /config folder. There is a nifty rake task to put the yaml file there for you:
 
 `rake paperclip:fedora:setup`
