@@ -30,8 +30,7 @@ other that you specify), as well as the original upload.
 
 ## Todo
 
-The object and datastream labels are currently static and not too pretty. Plans to 
-make the object label the original filename and the datastreams follow a similar pattern.
+More features?
 
 ## Copyright & Acknowledgements
 

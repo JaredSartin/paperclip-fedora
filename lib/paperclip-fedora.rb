@@ -14,8 +14,18 @@ module Paperclip
           end
 
           @fedora_config = parse_config(@options[:fedora_config])
-          @url = @fedora_config[:host] + "/objects/upload\::id/datastreams/:style/content"
-          @path = "upload\::id"
+          @path = ":basename_clean\::id"
+          @url = @fedora_config[:host] + "/objects/#{@path}/datastreams/:style/content"
+          
+          Paperclip.interpolates(:basename_clean) do |attachment, style|
+            s = File.basename(attachment.original_filename, File.extname(attachment.original_filename))
+            s.downcase!
+            s.gsub!(/'/, '')
+            s.gsub!(/[^A-Za-z0-9:\-]+/, ' ')
+            s.strip!
+            s.gsub!(/\ +/, '-')
+            s
+          end unless Paperclip::Interpolations.respond_to? :basename_clean
         end
       end
 
@@ -39,7 +49,7 @@ module Paperclip
           ds = fedora_object.datastreams[style.to_s]
           ds.controlGroup = 'M'
           ds.file = file
-          ds.dsLabel = "TempFile"
+          ds.dsLabel = "#{File.extname(file)} file"
           ds.save
           log("Added #{style} datastream to #{@object_id}")
         end
@@ -61,16 +71,12 @@ module Paperclip
         @@repo
       end
       
-      def create_object
+      def fedora_object
         @object_id = path()
         object = fedora.find(@object_id)
         object.label = @object_id
         saved_object = object.save
         saved_object
-      end
-
-      def fedora_object
-        @fedora_object ||= create_object
       end
 
       def parse_config config
