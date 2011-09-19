@@ -19,7 +19,9 @@ For server connection options, you should have a file titled paperclip-fedora.ym
 
 `rake paperclip:fedora:setup`
 
-After that, go edit the yaml file with your server settings per rails environment (They default to a server on the localhost).
+After that, go edit the yaml file with your server settings per rails environment (They default to a Fedora Commons server on the localhost).
+The settings will reflect the default Fedora Commons settings: host (in form localhost or example.com), port, and context (Fedora Commons context,
+based on your Fedora Commons setup).
 
 ## Overview
 

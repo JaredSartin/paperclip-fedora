@@ -14,8 +14,14 @@ module Paperclip
           end
 
           @fedora_config = parse_config(@options[:fedora_config])
+          @host = @fedora_config[:host]
+          @port = @fedora_config[:port]
+          @context = @fedora_config[:context]
+
+          @server_url = "http\://#{@host}\:#{@port}/#{@context}"
+
           @path = ":basename_clean\::id"
-          @url = @fedora_config[:host] + "/objects/#{@path}/datastreams/:style/content"
+          @url = "#{@server_url}/objects/#{@path}/datastreams/:style/content"
           
           Paperclip.interpolates(:basename_clean) do |attachment, style|
             s = File.basename(attachment.original_filename, File.extname(attachment.original_filename))
@@ -67,7 +73,7 @@ module Paperclip
       end
 
       def fedora
-        @@repo ||= Rubydora.connect url: @fedora_config[:host], user: @fedora_config[:user], password: @fedora_config[:password] 
+        @@repo ||= Rubydora.connect url: @server_url, user: @fedora_config[:user], password: @fedora_config[:password] 
         @@repo
       end
       
