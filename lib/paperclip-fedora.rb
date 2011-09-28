@@ -20,6 +20,9 @@ module Paperclip
           @custom_namespace = @options[:fedora_pid]
 
           @server_url = "http\://#{@host}\:#{@port}/#{@context}"
+          @object_id = instance.uuid || @custom_pid || path()
+          @path = @object_id
+          @url = "#{@server_url}/objects/#{@path}/datastreams/:style/content"
 
           Paperclip.interpolates(:basename_clean) do |attachment, style|
             s = File.basename(attachment.original_filename, File.extname(attachment.original_filename))
@@ -49,14 +52,22 @@ module Paperclip
       end
 
       def flush_writes
+        @object_id = instance.uuid || @custom_pid || path()
+        @path = @object_id
+        @url = "#{@server_url}/objects/#{@path}/datastreams/:style/content"
+        ps = fedora_object.datastreams['paperclip_styles']
+        style_list = ps.content
         @queued_for_write.each do |style, file|
+          style_list = "#{style_list.strip} #{style.to_s}"
           ds = fedora_object.datastreams[style.to_s]
           ds.controlGroup = 'M'
           ds.file = file
-          ds.dsLabel = "#{File.extname(file)} file"
+          ds.dsLabel = "Paperclip: #{File.extname(file)} file"
           ds.save
           log("Added #{style} datastream to #{@object_id}")
         end
+        ps.content = style_list.strip
+        ps.save
         @queued_for_write = {}
       end
 
@@ -64,8 +75,15 @@ module Paperclip
         @queued_for_delete.uniq!
         @queued_for_delete.each do |path|
           object = fedora.find(path)
-          object.delete if !object.new?
-          log("Deleted #{path}")
+          pso = object.datastreams['paperclip_styles']
+          ps = pso.content
+          ps.split(' ').each do |style|
+            ds = object.datastreams[style]
+            ds.delete
+            log("Deleted #{path} - #{style} stream")
+          end
+          pso.content = " "
+          pso.save
         end
         @queued_for_delete = []
       end
@@ -82,6 +100,14 @@ module Paperclip
         object = fedora.find(@object_id)
         object.label = @object_id
         saved_object = object.save
+        paperclip_styles = object.datastreams['paperclip_styles']
+        if paperclip_styles.new?
+          paperclip_styles.controlGroup = 'M'
+          paperclip_styles.dsLabel = "Paperclip styles - Used for deletion tracking"
+          paperclip_styles.content = " "
+          paperclip_styles.mimeType = "text/plain"
+          paperclip_styles.save
+        end
         saved_object
       end
 
@@ -116,7 +142,6 @@ module Paperclip
             raise ArgumentError, "Configuration settings are not a path, file, or hash."
         end
       end
-
     end
   end
 end
