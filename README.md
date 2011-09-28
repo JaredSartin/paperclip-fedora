@@ -18,6 +18,8 @@ You can set your own pid for the object by specifying it in the has_attached fil
 
 `has_attached_file :content, :storage => :Fedora, :fedora_pid => self.uuid`
 
+or have uuid on your model this is getting added to. If uuid is present on the model, this will be the Fedora object id.
+
 (Note, if the pid is static, all of your uploads will continually overwrite each other. Make sure to generate them in the form of
 NAMESPACE:ID - for valid PID naming see https://wiki.duraspace.org/display/FEDORA35/Fedora+Identifiers#FedoraIdentifiers-PIDs )
 

@@ -17,14 +17,10 @@ module Paperclip
           @host = @fedora_config[:host]
           @port = @fedora_config[:port]
           @context = @fedora_config[:context]
-
-          @custom_pid = @options[:fedora_pid]
+          @custom_namespace = @options[:fedora_pid]
 
           @server_url = "http\://#{@host}\:#{@port}/#{@context}"
 
-          @path = ":basename_clean\::id"
-          @url = "#{@server_url}/objects/#{@path}/datastreams/:style/content"
-          
           Paperclip.interpolates(:basename_clean) do |attachment, style|
             s = File.basename(attachment.original_filename, File.extname(attachment.original_filename))
             s.downcase!
@@ -80,7 +76,9 @@ module Paperclip
       end
       
       def fedora_object
-        @object_id = @custom_pid || path()
+        @object_id = instance.uuid || @custom_pid || path()
+        @path = @object_id
+        @url = "#{@server_url}/objects/#{@path}/datastreams/:style/content"
         object = fedora.find(@object_id)
         object.label = @object_id
         saved_object = object.save
