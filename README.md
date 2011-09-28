@@ -14,7 +14,14 @@ has_attachment:
 
 `has_attached_file :content, :storage => :Fedora`
 
-For server connection options, you should have a file titled paperclip-fedora.yml in your
+You can set your own pid for the object by specifying it in the has_attached file of your model as well, such as:
+
+`has_attached_file :content, :storage => :Fedora, :fedora_pid => self.uuid`
+
+(Note, if the pid is static, all of your uploads will continually overwrite each other. Make sure to generate them in the form of
+NAMESPACE:ID - for valid PID naming see https://wiki.duraspace.org/display/FEDORA35/Fedora+Identifiers#FedoraIdentifiers-PIDs )
+
+For server connection options, you should have a file titled fedora.yml in your
 /config folder. There is a nifty rake task to put the yaml file there for you:
 
 `rake paperclip:fedora:setup`

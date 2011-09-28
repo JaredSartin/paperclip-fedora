@@ -18,6 +18,8 @@ module Paperclip
           @port = @fedora_config[:port]
           @context = @fedora_config[:context]
 
+          @custom_pid = @options[:fedora_pid]
+
           @server_url = "http\://#{@host}\:#{@port}/#{@context}"
 
           @path = ":basename_clean\::id"
@@ -78,7 +80,7 @@ module Paperclip
       end
       
       def fedora_object
-        @object_id = path()
+        @object_id = @custom_pid || path()
         object = fedora.find(@object_id)
         object.label = @object_id
         saved_object = object.save
@@ -91,11 +93,11 @@ module Paperclip
       end
 
       def setup!
-        FileUtils.cp(File.dirname(__FILE__) + "/../config/paperclip-fedora.yml", config_file) unless config?
+        FileUtils.cp(File.dirname(__FILE__) + "/../config/fedora.yml", config_file) unless config?
       end
 
       def config_file
-        Rails.root.join("config", "paperclip-fedora.yml").to_s
+        Rails.root.join("config", "fedora.yml").to_s
       end
       
       def config?
