@@ -98,7 +98,6 @@ module Paperclip
         @path = @object_id
         @url = "#{@server_url}/objects/#{@path}/datastreams/:style/content"
         object = fedora.find(@object_id)
-        object.label = @object_id
         saved_object = object.save
         paperclip_styles = object.datastreams['paperclip_styles']
         if paperclip_styles.new?
