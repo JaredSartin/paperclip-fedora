@@ -44,11 +44,11 @@ module Paperclip
       def to_file(style=default_style)
         return @queued_for_write[style.to_s] if @queued_for_write[style.to_s]
         ds = fedora_object.datastreams[style.to_s]
-        file = Tempfile.new([ds.label, style.to_s])
+        file = Tempfile.new([fedora_object.label, style.to_s])
         file.binmode
-        file.write(ds.file)
+        file.write(ds.read)
         file.rewind
-        return file        
+        file
       end
 
       def flush_writes
